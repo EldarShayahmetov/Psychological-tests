@@ -1,0 +1,333 @@
+unit DataOb;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB, frxClass, frxDBSet;
+
+type
+  TDM1 = class(TDataModule)
+    ADOCPDT: TADOConnection;
+    ADOQTesting: TADOQuery;
+    ADOQRespondent: TADOQuery;
+    ADOQTest: TADOQuery;
+    ADOQResult: TADOQuery;
+    ADOQParamResult: TADOQuery;
+    ADOQQuestion: TADOQuery;
+    ADOQAnswer: TADOQuery;
+    ADOQProtocol: TADOQuery;
+    ADOQPassword: TADOQuery;
+    ADOQProtocolID_Protocol: TAutoIncField;
+    ADOQProtocolID_Testing: TIntegerField;
+    ADOQProtocolNum_Question: TIntegerField;
+    ADOQProtocolNum_Answer: TIntegerField;
+    ADOQProtocolTimeAnswer: TDateTimeField;
+    ADOQProtocolQuestion: TStringField;
+    ADOQProtocolAnswer: TStringField;
+    ADOQTesting2: TADOQuery;
+    DSRespondent: TDataSource;
+    DSTesting: TDataSource;
+    DSResult: TDataSource;
+    DSProtocol: TDataSource;
+    ADOQResultID_Result: TAutoIncField;
+    ADOQResultID_Testing: TIntegerField;
+    ADOQResultID_ParamResult: TIntegerField;
+    ADOQResultValue_Result: TWideStringField;
+    ADOQResultName_ParamResult: TStringField;
+    frxReport1: TfrxReport;
+    frxDBDatasetR: TfrxDBDataset;
+    frxDBDatasetP: TfrxDBDataset;
+    ADOQTemp: TADOQuery;
+    procedure ADOQProtocolCalcFields(DataSet: TDataSet);
+    procedure ADOQRspondentAfterScroll(DataSet: TDataSet);
+    procedure ADOQTestingAfterScroll(DataSet: TDataSet);
+    procedure ADOQResultCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  DM1: TDM1;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+uses main;
+
+{$R *.dfm}
+
+procedure TDM1.ADOQProtocolCalcFields(DataSet: TDataSet);
+// расчиать значения расчётных полей базы данных протокола: текст вопроса и
+
+// текст ответа по соответсвующим номерам
+
+var
+
+ID_Test, ID_Testing, Num_Answer, Num_Question : String;
+
+SQ, SA : String;
+
+begin
+
+with DM1 do
+
+begin
+
+// получить номер эксперимента
+
+ID_Testing := ADOQProtocol.FieldByName('ID_Testing').AsString;  // Можетбытьошыбка
+
+// подготовить запрос
+
+with ADOQTesting2 do
+
+begin
+
+// если запрос был активный, сделать его неактивным
+
+active := false;
+
+// скорректировать запрос эксперимента
+
+with SQL do
+
+begin
+
+// очистить "старый" запрос
+
+Clear;
+
+// ввыбрать номер теста из записи эксперимента
+
+Add('SELECT * FROM Testing WHERE ID_Testing = '+ID_Testing);
+
+end;
+
+// сделать запрос активным
+
+Active := True;
+
+// считать номер теста
+
+ID_Test := FieldByName('ID_Test').AsString;
+
+end;
+
+// считать номер вопроса протокола
+
+Num_Question := ADOQProtocol.FieldByName('Num_Question').AsString;
+
+with ADOQQuestion do
+
+begin
+
+// сменить запрос вопроса для выбранного теста и номера вопроса
+
+with SQL do
+
+begin
+
+// очистить запрос
+
+Clear;
+
+// считать текст вопроса по номерам теста и вопроса
+
+Add('SELECT * FROM Question WHERE (ID_Test = '+ID_Test+')AND(Num_Question = '+Num_Question+')');
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+// считать текст вопроса
+
+SQ := FieldByName('Question').AsString;
+
+end;
+
+// методика с номером один имеет только один вариант ответов как на вопрос один
+
+if ID_Test = '1' then Num_Question := '1';
+
+// считать номер ответа протокола
+
+Num_Answer := ADOQProtocol.FieldByName('Num_Answer').AsString;
+
+// скорректировать запрос для выбранного теста, вопроса и ответа
+
+with ADOQAnswer do
+
+begin
+
+// изменить запрос
+
+with SQL do
+
+begin
+
+// очистить старый запрос
+
+Clear;
+
+// считать текст ответа по номерам теста, вопроса и ответа
+
+Add('SELECT * FROM Answer WHERE (ID_Test = '+ID_Test+')AND(Num_Question = '+Num_Question+')AND(Num_Answer = '+Num_Answer+')');
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+// считать текст ответа
+
+SA := FieldByName('Answer').AsString;
+
+end;
+
+// присвоить полям таблицы считанные тексты вопроса и ответа
+
+ADOQProtocol.FieldByName('Question').AsString := SQ;
+
+ADOQProtocol.FieldByName('Answer').AsString := SA;
+
+end;
+
+end;
+
+procedure TDM1.ADOQResultCalcFields(DataSet: TDataSet);
+var
+
+ID_Test, ID_Testing, Num_Answer, Num_Question : String;
+
+SQ, SA : String;
+
+begin
+
+with DM1 do
+
+begin
+
+// получить номер эксперимента
+
+ID_Testing := ADOQResult.FieldByName('ID_Testing').AsString;  // Можетбытьошыбка
+
+// подготовить запрос
+
+with ADOQTesting2 do
+
+begin
+
+// если запрос был активный, сделать его неактивным
+
+active := false;
+
+// скорректировать запрос эксперимента
+
+with SQL do
+
+begin
+
+// очистить "старый" запрос
+
+Clear;
+
+// ввыбрать номер теста из записи эксперимента
+
+Add('SELECT * FROM Testing WHERE ID_Testing = '+ID_Testing);
+
+end;
+
+// сделать запрос активным
+
+Active := True;
+
+// считать номер теста
+
+ID_Test := FieldByName('ID_Test').AsString;
+
+end;
+
+// считать номер вопроса протокола
+
+Num_Question := ADOQResult.FieldByName('ID_ParamResult').AsString;
+
+with ADOQParamResult do
+
+begin
+
+// сменить запрос вопроса для выбранного теста и номера вопроса
+
+with SQL do
+
+begin
+
+// очистить запрос
+
+Clear;
+
+// считать текст вопроса по номерам теста и вопроса
+
+Add('SELECT * FROM ParamResult WHERE (ID_Test = '+ID_Test+')AND(ID_ParamResult = '+Num_Question+')');
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+// считать текст вопроса
+
+SQ := FieldByName('Parametr').AsString;
+
+end;
+
+// присвоить полям таблицы считанные тексты вопроса и ответа
+
+ADOQResult.FieldByName('Name_ParamResult').AsString := SQ;
+
+end;
+end;
+
+procedure TDM1.ADOQRspondentAfterScroll(DataSet: TDataSet);
+begin
+if ADOQRespondent.RecordCount>0 then
+
+begin
+
+ADOQTesting.Filtered:=False;
+
+ADOQTesting.Filter:='ID_Respondent='+
+
+ADOQRespondent.FieldByName('ID_Respondent').AsString;
+
+ADOQTesting.Filtered:=True;
+end;
+end;
+
+procedure TDM1.ADOQTestingAfterScroll(DataSet: TDataSet);
+begin
+
+with FMain do
+
+begin
+
+// при выборе нового эксперимента сделать окна результатов и протокола не видимыми
+
+DBGProtocol.Visible := False;
+
+DBGResult.Visible := False;
+
+end;
+
+end;
+
+
+
+end.

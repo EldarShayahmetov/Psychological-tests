@@ -1,0 +1,493 @@
+object DM1: TDM1
+  OldCreateOrder = False
+  Height = 398
+  Width = 770
+  object ADOCPDT: TADOConnection
+    LoginPrompt = False
+    Mode = cmShareDenyNone
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 296
+    Top = 32
+  end
+  object ADOQTesting: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    AfterScroll = ADOQTestingAfterScroll
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Testing')
+    Left = 96
+    Top = 96
+  end
+  object ADOQRespondent: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Respondent')
+    Left = 664
+    Top = 160
+  end
+  object ADOQTest: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Test')
+    Left = 240
+    Top = 96
+  end
+  object ADOQResult: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    OnCalcFields = ADOQResultCalcFields
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Result')
+    Left = 304
+    Top = 96
+    object ADOQResultID_Result: TAutoIncField
+      FieldName = 'ID_Result'
+      ReadOnly = True
+    end
+    object ADOQResultID_Testing: TIntegerField
+      FieldName = 'ID_Testing'
+    end
+    object ADOQResultID_ParamResult: TIntegerField
+      FieldName = 'ID_ParamResult'
+    end
+    object ADOQResultName_ParamResult: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Name_ParamResult'
+      Calculated = True
+    end
+    object ADOQResultValue_Result: TWideStringField
+      FieldName = 'Value_Result'
+      Size = 255
+    end
+  end
+  object ADOQParamResult: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM ParamResult')
+    Left = 384
+    Top = 96
+  end
+  object ADOQQuestion: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Question')
+    Left = 456
+    Top = 96
+  end
+  object ADOQAnswer: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Answer')
+    Left = 528
+    Top = 96
+  end
+  object ADOQProtocol: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    OnCalcFields = ADOQProtocolCalcFields
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Protocol')
+    Left = 600
+    Top = 96
+    object ADOQProtocolID_Protocol: TAutoIncField
+      FieldName = 'ID_Protocol'
+      ReadOnly = True
+    end
+    object ADOQProtocolID_Testing: TIntegerField
+      FieldName = 'ID_Testing'
+    end
+    object ADOQProtocolNum_Question: TIntegerField
+      FieldName = 'Num_Question'
+    end
+    object ADOQProtocolNum_Answer: TIntegerField
+      FieldName = 'Num_Answer'
+    end
+    object ADOQProtocolTimeAnswer: TDateTimeField
+      FieldName = 'TimeAnswer'
+    end
+    object ADOQProtocolQuestion: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Question'
+      Size = 150
+      Calculated = True
+    end
+    object ADOQProtocolAnswer: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Answer'
+      Size = 50
+      Calculated = True
+    end
+  end
+  object ADOQPassword: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Code')
+    Left = 680
+    Top = 96
+  end
+  object ADOQTesting2: TADOQuery
+    Connection = ADOCPDT
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM Testing2')
+    Left = 168
+    Top = 96
+  end
+  object DSRespondent: TDataSource
+    DataSet = ADOQRespondent
+    Left = 216
+    Top = 168
+  end
+  object DSTesting: TDataSource
+    AutoEdit = False
+    DataSet = ADOQTesting
+    Left = 320
+    Top = 176
+  end
+  object DSResult: TDataSource
+    DataSet = ADOQResult
+    Left = 424
+    Top = 176
+  end
+  object DSProtocol: TDataSource
+    DataSet = ADOQProtocol
+    Left = 504
+    Top = 168
+  end
+  object frxReport1: TfrxReport
+    Version = '5.1.5'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 42858.853997627300000000
+    ReportOptions.LastChange = 42858.919371087960000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 360
+    Top = 264
+    Datasets = <
+      item
+        DataSet = frxDBDatasetR
+        DataSetName = 'frxDBDataset1'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      object ReportTitle1: TfrxReportTitle
+        FillType = ftBrush
+        Height = 22.677180000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Memo1: TfrxMemoView
+          Left = 260.787570000000000000
+          Width = 336.378170000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103)
+          ParentFont = False
+        end
+      end
+      object PageHeader1: TfrxPageHeader
+        FillType = ftBrush
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Height = 207.874150000000000000
+        ParentFont = False
+        Top = 64.252010000000000000
+        Width = 718.110700000000000000
+        object Memo2: TfrxMemoView
+          Left = 102.047310000000000000
+          Top = 18.897650000000000000
+          Width = 109.606370000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold, fsItalic]
+          Memo.UTF8W = (
+            #1056#1077#1089#1087#1086#1085#1076#1077#1085#1090':')
+          ParentFont = False
+        end
+        object Memo3: TfrxMemoView
+          Left = 151.181200000000000000
+          Top = 56.692950000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold, fsItalic]
+          Memo.UTF8W = (
+            #1040#1055#1044#1052':')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 41.574830000000000000
+          Top = 98.267780000000000000
+          Width = 185.196970000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold, fsItalic]
+          Memo.UTF8W = (
+            #1044#1072#1090#1072' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103':')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 30.236240000000000000
+          Top = 136.063080000000000000
+          Width = 200.315090000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold, fsItalic]
+          Memo.UTF8W = (
+            #1042#1088#1077#1084#1103' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103':')
+          ParentFont = False
+        end
+        object MemoResp: TfrxMemoView
+          Left = 264.567100000000000000
+          Top = 18.897650000000000000
+          Width = 430.866420000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1056#1077#1089#1087#1086#1085#1076#1077#1085#1090':')
+          ParentFont = False
+        end
+        object MemoAPDM: TfrxMemoView
+          Left = 264.567100000000000000
+          Top = 56.692950000000000000
+          Width = 430.866420000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1040#1055#1044#1052':')
+          ParentFont = False
+        end
+        object MemoDate: TfrxMemoView
+          Left = 264.567100000000000000
+          Top = 98.267780000000000000
+          Width = 430.866420000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1044#1072#1090#1072' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103':')
+          ParentFont = False
+        end
+        object MemoTime: TfrxMemoView
+          Left = 264.567100000000000000
+          Top = 136.063080000000000000
+          Width = 430.866420000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1042#1088#1077#1084#1103' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103':')
+          ParentFont = False
+        end
+      end
+      object Header1: TfrxHeader
+        FillType = ftBrush
+        Height = 41.574830000000000000
+        Top = 332.598640000000000000
+        Width = 718.110700000000000000
+        object Memo6: TfrxMemoView
+          Left = 75.590600000000000000
+          Top = 18.897650000000000000
+          Width = 177.637910000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8W = (
+            #1055#1072#1088#1072#1084#1077#1090#1088' '#1088#1077#1079#1091#1083#1100#1090#1072#1090#1072)
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 253.228510000000000000
+          Top = 18.897650000000000000
+          Width = 83.149660000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8W = (
+            #1047#1085#1072#1095#1077#1085#1080#1077)
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        FillType = ftBrush
+        Height = 64.252010000000000000
+        Top = 396.850650000000000000
+        Width = 718.110700000000000000
+        DataSet = frxDBDatasetR
+        DataSetName = 'frxDBDataset1'
+        RowCount = 0
+        object Memo8: TfrxMemoView
+          Left = 75.590600000000000000
+          Top = 7.559060000000000000
+          Width = 166.299320000000000000
+          Height = 18.897650000000000000
+          DataField = 'Name_ParamResult'
+          DataSet = frxDBDatasetR
+          DataSetName = 'frxDBDataset1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8W = (
+            '[frxDBDataset1."Name_ParamResult"]')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          Left = 241.889920000000000000
+          Top = 7.559060000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          DataField = 'Value_Result'
+          DataSet = frxDBDatasetR
+          DataSetName = 'frxDBDataset1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8W = (
+            '[frxDBDataset1."Value_Result"]')
+          ParentFont = False
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        FillType = ftBrush
+        Height = 94.488250000000000000
+        Top = 521.575140000000000000
+        Width = 718.110700000000000000
+        object Memo10: TfrxMemoView
+          Left = 196.535560000000000000
+          Top = 49.133890000000000000
+          Width = 219.212740000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103)
+          ParentFont = False
+        end
+        object Memo11: TfrxMemoView
+          Left = 438.425480000000000000
+          Top = 49.133890000000000000
+          Width = 94.488250000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            '[Page#]')
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object frxDBDatasetR: TfrxDBDataset
+    UserName = 'frxDBDataset1'
+    CloseDataSource = False
+    DataSet = ADOQResult
+    BCDToCurrency = False
+    Left = 264
+    Top = 328
+  end
+  object frxDBDatasetP: TfrxDBDataset
+    UserName = 'frxDBDataset2'
+    CloseDataSource = False
+    DataSet = ADOQProtocol
+    BCDToCurrency = False
+    Left = 448
+    Top = 328
+  end
+  object ADOQTemp: TADOQuery
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=.\PDT.mdb;Persist S' +
+      'ecurity Info=False'
+    Parameters = <>
+    Left = 216
+    Top = 248
+  end
+end

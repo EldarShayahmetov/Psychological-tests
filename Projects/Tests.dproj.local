@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.224,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.685,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\DataOb.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.142,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\password.dfm=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.142,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\password.pas=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.388,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Tests.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.685,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\DataOb.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.901,=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.414,=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.717,=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.559,=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.223,C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Эльдар\Documents\Embarcadero\Studio\Projects\main.pas</Transaction>
+  </Transactions>
+</BorlandProject>

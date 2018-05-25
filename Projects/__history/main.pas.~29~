@@ -1,0 +1,1335 @@
+unit main;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.ComCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, ShellApi;
+
+type
+  TFMain = class(TForm)
+    PTop: TPanel;
+    PBottom: TPanel;
+    BitBtn1: TBitBtn;
+    BBTest: TBitBtn;
+    RGStatus: TRadioGroup;
+    PMainTest: TPanel;
+    PResp: TPanel;
+    PTest: TPanel;
+    PFIOResp: TPanel;
+    PFind: TPanel;
+    EFind: TEdit;
+    BBFind: TBitBtn;
+    LBRespondent: TListBox;
+    PNameTest: TPanel;
+    LBTest: TListBox;
+    PMainPsy: TPanel;
+    PAddResp: TPanel;
+    EFamily: TEdit;
+    EName: TEdit;
+    ESurName: TEdit;
+    CBSex: TComboBox;
+    DTPBorn: TDateTimePicker;
+    BBAdd: TBitBtn;
+    BBEdit: TBitBtn;
+    BBDelete: TBitBtn;
+    PExperiment: TPanel;
+    Panel1: TPanel;
+    DBGTesting: TDBGrid;
+    PButExp: TPanel;
+    BBResult: TBitBtn;
+    BBProtocol: TBitBtn;
+    BBResultOtchet: TBitBtn;
+    BBProtocolOtchet: TBitBtn;
+    PResultProtocol: TPanel;
+    DBGResult: TDBGrid;
+    DBGProtocol: TDBGrid;
+    PFindResp: TPanel;
+    EFindResp: TEdit;
+    DBGRespondent: TDBGrid;
+    Timer1: TTimer;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    LFamily: TLabel;
+    LName: TLabel;
+    LSurName: TLabel;
+    LSex: TLabel;
+    LBorn: TLabel;
+    Label2: TLabel;
+    procedure BBTestClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure LBRespondentClick(Sender: TObject);
+    procedure LBTestClick(Sender: TObject);
+    procedure RGStatusClick(Sender: TObject);
+    procedure BBAddClick(Sender: TObject);
+    procedure BBEditClick(Sender: TObject);
+    procedure BBDeleteClick(Sender: TObject);
+    procedure BBResultClick(Sender: TObject);
+    procedure BBProtocolClick(Sender: TObject);
+    procedure BBFindClick(Sender: TObject);
+    procedure DBGRespondentCellClick(Column: TColumn);
+    procedure DBGRespondentKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EFindRespChange(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FMain: TFMain; S: String; Pass: Boolean;
+
+implementation
+
+{$R *.dfm}
+
+uses DataOb, password;
+
+procedure TFMain.BBAddClick(Sender: TObject);
+var
+
+B : Boolean; // проверка записи
+
+i : integer; // счётчик цикла
+
+begin
+// запись разрешена
+
+BBAdd.Enabled :=False;
+BBEdit.Enabled :=False;
+BBDelete.Enabled :=False;
+Timer1.Enabled :=true;
+
+B := TRUE;
+
+with DM1 do
+
+begin
+
+// записать все данные из полей ввода в базу данных
+
+with ADOQRespondent do
+
+begin
+
+// если одно из полей не введено, то не записывать данные в БД
+
+if EFamily.Text = '' then
+
+B := FALSE;
+
+if EName.Text = '' then
+
+B := FALSE;
+
+if ESurName.Text = '' then
+
+B := FALSE;
+
+if CBSex.Text = '' then
+
+B := FALSE;
+
+if DateToStr(DTPBorn.Date) = '' then
+
+B := FALSE;
+
+// запись разрешена (введены все поля)
+
+if B then
+
+with SQL do
+
+begin
+
+// вводим данные в базу данных
+
+// очистить "старый" запрос
+
+Clear;
+
+// добавляем новую запись с данными респондента: фамилия, имя, пол, день рождения
+
+Add('INSERT INTO Respondent(Family, Name, SurName, Sex, Born)'+
+
+'VALUES('+QuotedStr(EFamily.Text)+', '+QuotedStr(EName.Text)+', '+
+
+QuotedStr(ESurName.Text)+', '+QuotedStr(CBSex.Text)+', '+
+
+QuotedStr(DateToStr(DTPBorn.Date))+')');
+
+// выполнить запрос
+
+ExecSQL;
+
+// активировать базу данных для отображения в таблице
+
+// очистить "старый" запрос
+
+Clear;
+
+
+// вывести список респондентов
+
+Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := True;
+
+
+end;
+
+end;
+
+// перечитать информацию респондентов из базы данных
+
+with ADOQRespondent do
+
+begin
+
+// очистить поле запроса
+
+SQL.Clear;
+
+// сформировать запрос для выбора всех данных
+
+SQL.Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := TRUE;
+
+// очистить список респондентов
+
+LBRespondent.Items.Clear;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// считать название теста и присвоить его метке на форме
+
+LBRespondent.Items.Add(FieldByName('Family').AsString+' '+
+
+FieldByName('Name').AsString+' '+
+
+FieldByName('SurName').AsString);
+
+// перейти к следующей записи
+
+Next;
+
+end;
+
+end;
+
+end;
+
+end;
+
+procedure TFMain.BBDeleteClick(Sender: TObject);
+var
+
+No, i : Integer;
+
+S : String;
+
+begin
+// считать фамилию, имя, отчество в текущей записи
+
+with DM1.ADOQRespondent do
+
+S := '('+FieldByName('Family').AsString+' '+
+
+FieldByName('Name').AsString+' '+
+
+FieldByName('Surname').AsString + ')';
+
+// выдать запрос на удаление
+
+If MessageDlg('Удалить текущую запись '+S+'?',mtConfirmation, [mbYes, mbNo], 0, mbNo) = mrYes then
+
+// изменить запрос
+
+with DM1 do
+
+begin
+
+with ADOQRespondent do
+
+begin
+
+// узнать номер редактируемой записи
+
+No := FieldByName('ID_Respondent').AsInteger;
+
+with SQL do
+
+begin
+
+// очистить старый запрос
+
+Clear;
+
+// отредактировать текущую запись
+
+S := 'DELETE FROM Respondent WHERE ID_Respondent = '+IntToStr(No);
+
+Add(S);
+
+// выполнить запрос
+
+ExecSQL;
+
+
+Clear;
+
+
+// вывести список респондентов
+
+Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := True;
+
+
+LBRespondent.Items.Clear;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// считать название теста и присвоить его метке на форме
+
+LBRespondent.Items.Add(FieldByName('Family').AsString+' '+
+
+FieldByName('Name').AsString+' '+
+
+FieldByName('SurName').AsString);
+
+// перейти к следующей записи
+
+Next;
+end;
+
+BBAdd.Enabled :=False;
+BBEdit.Enabled :=False;
+BBDelete.Enabled :=False;
+Timer1.Enabled :=true;
+
+
+end;
+
+// перечитать данные для отображения на экране
+
+with SQL do
+
+begin
+
+// очистить старый запрос
+
+Clear;
+
+// отредактировать текущую запись
+
+S := 'SELECT * FROM Respondent';
+
+Add(S);
+
+// выполнить запрос
+Active := True;
+
+
+end;
+end;
+
+end;
+end;
+
+procedure TFMain.BBEditClick(Sender: TObject);
+var
+
+No,i : Integer; // номер записи
+
+S : String;
+
+begin
+
+// выдать запрос на запись отредактированных данных в базу данных
+
+If MessageDlg('Отредактировать текущую запись введёнными данными?',mtConfirmation, [mbYes, mbNo], 0, mbNo) = mrYes then
+
+// изменить запрос
+
+with DM1 do
+
+begin
+
+with ADOQRespondent do
+
+begin
+
+// узнать номер редактируемой записи
+
+No := FieldByName('ID_Respondent').AsInteger;
+
+with SQL do
+
+begin
+
+// очистить старый запрос
+
+Clear;
+
+// отредактировать текущую запись
+
+S := 'UPDATE Respondent SET Family ='+QuotedStr(EFamily.Text)+
+
+', Name ='+QuotedStr(EName.Text)+
+
+', Surname ='+QuotedStr(ESurName.Text)+
+
+', Sex ='+QuotedStr(CBSex.Text)+
+
+', Born ='+QuotedStr(DateToStr(DTPBorn.Date))+
+
+' WHERE ID_Respondent = '+IntToStr(No);
+
+Add(S);
+
+// выполнить запрос
+
+ExecSQL;
+
+// активировать базу данных для отображения в таблице
+
+// очистить "старый" запрос
+
+Clear;
+
+// вывести список респондентов
+
+Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := True;
+
+LBRespondent.Items.Clear;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// считать название теста и присвоить его метке на форме
+
+LBRespondent.Items.Add(FieldByName('Family').AsString+' '+
+
+FieldByName('Name').AsString+' '+
+
+FieldByName('SurName').AsString);
+
+// перейти к следующей записи
+
+Next;
+end;
+
+BBAdd.Enabled :=False;
+BBEdit.Enabled :=False;
+BBDelete.Enabled :=False;
+Timer1.Enabled :=true;
+
+
+
+end;
+
+end;
+
+end;
+end;
+
+procedure TFMain.BBFindClick(Sender: TObject);
+var
+
+i: integer; // индекс выбранного элемента
+
+begin
+
+// если текст не введён выйти
+
+if EFind.Text='' then exit;
+
+// просмотреть весь список
+
+for i:=0 To LBRespondent.Items.Count-1 Do
+
+// если вхождение искомой подстроки в строку элемента списка есть
+
+if pos(EFind.Text,LBRespondent.Items.Strings[i])>0 then
+
+// присвоить списку индекс найденного элемента
+
+LBRespondent.ItemIndex := i;
+
+// установить фокус на элемент списка
+
+LBRespondent.SetFocus;
+end;
+
+procedure TFMain.BBProtocolClick(Sender: TObject);
+var
+
+ID_Testing : String;
+
+begin
+
+with DM1 do
+
+begin
+
+// скрыть окно результатов
+
+with DBGResult do
+
+begin
+
+Align := alNone;
+
+Visible := False;
+
+end;
+
+// отобразить окно протокола
+
+with DBGProtocol do
+
+begin
+
+Align := alClient;
+
+Visible := True;
+
+end;
+
+// считать номер выбранного эксперимента
+
+ID_Testing := ADOQTesting.FieldByName('ID_Testing').AsString;
+
+// респондент прошёл хотя бы 1 эксперимент
+
+if ID_Testing <> '' then
+
+begin
+
+// отобразить протокол выбранного эксперимента
+
+with ADOQProtocol do
+
+begin
+
+// сменить запрос протокола выбрав только записи выбранного эксперимента
+
+with SQL do
+
+begin
+
+// очистить "старый" запрос
+
+Clear;
+
+// вывести протокол тестирования в соответсвии с выбранным экспериментом
+
+Add('SELECT * FROM Protocol WHERE ID_Testing = '+ID_Testing);
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+end;
+
+end;
+
+end;
+
+end;
+
+procedure TFMain.BBResultClick(Sender: TObject);
+var
+
+ID_Testing : String;
+
+begin
+
+// скрыть окно протокола
+
+with DBGProtocol do
+
+begin
+
+Align := alNone;
+
+Visible := False;
+
+end;
+
+// отобразить окно результатов
+
+with DBGResult do
+
+begin
+
+Align := alClient;
+
+Visible := True;
+
+end;
+
+with DM1 do
+
+begin
+
+// считать номер выбранного эксперимента
+
+ID_Testing := ADOQTesting.FieldByName('ID_Testing').AsString;
+
+// респондент прошёл хотя бы 1 эксперимент
+
+if ID_Testing <> '' then
+
+begin
+
+// отобразить результаты выбранного эксперимента
+
+with ADOQResult do
+
+begin
+
+// сменить запрос результата выбранного эксперимента
+
+with SQL do
+
+begin
+
+// очистить "старый" запрос
+
+Clear;
+
+// выбрать результаты в соответствии с выбранным экспериментом
+
+Add('SELECT * FROM Result WHERE ID_Testing = '+ID_Testing);
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+end;
+
+end;
+
+end;
+end;
+
+procedure TFMain.BBTestClick(Sender: TObject);
+var
+
+ST, SR : String; // хранение названия теста и имени респондента
+
+FT : String; // имя запускаемого файла
+
+S2 : String; // путь к запускаемой программе
+
+ID : String; // идентификационный номер респондента
+
+i : Integer; // счётчик
+
+begin
+
+// по умолчанию открыто окно для проведения тестирования
+
+if not PMainTest.Visible then
+
+begin
+
+// сделать панель управления данными психологом (ввод данных, просмотр результатов) видимой
+
+PMainPsy.Visible := False;
+
+// сделать панель тестирования видимой
+
+PMainTest.Visible := True;
+
+end;
+
+// сменить курсор на курсор ожидания
+
+Screen.Cursor := crHourGlass;
+
+// запомнить имя выбранного теста
+
+ST := LBTest.Items[LBTest.ItemIndex];
+
+// запомнить имя выбранного респондента
+
+SR := LBRespondent.Items[LBRespondent.ItemIndex];
+
+// подготовить тест к запуску
+
+with DM1 do
+
+begin
+
+with ADOQTest do
+
+begin
+
+// очистить поле запроса
+
+SQL.Clear;
+
+// сформировать запрос для выбора всех данных
+
+SQL.Add('SELECT * FROM Test WHERE NameTest='''+ST+'''');
+
+// активировать запрос
+
+Active := TRUE;
+
+// считать имя запукаемого файла
+
+FT := FieldByName('RunFile').AsString;
+
+end;
+
+// выбрать респондента для тестирования
+
+with ADOQRespondent do
+
+begin
+
+// очистить поле запроса
+
+SQL.Clear;
+
+// сформировать запрос для выбора всех данных
+
+SQL.Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := TRUE;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// найти запись респондента в базе данных
+
+If (FieldByName('Family').AsString+' '+FieldByName('Name').AsString+' '+
+
+FieldByName('SurName').AsString) = SR then
+
+begin
+
+// счиать его идентификатор из базы данных и сохранить его в
+
+ID := FieldByName('ID_Respondent').AsString;
+
+// если запись найдена, закончить перебор и выйти из цикла
+
+Break;
+
+end;
+
+// перейти к следующей записи
+
+Next;
+
+end;
+
+end;
+
+end;
+
+// считать путь к запускаемому файлу
+
+FT := S +'/'+ FT;
+
+// скорректировать имя для выбора папки запуска
+
+Screen.Cursor := crDefault;
+
+// запустить файл теста
+
+ShellExecute(Handle,'open',PWideChar(FT), PWideChar(ID), nil, SW_SHOW);
+
+end;
+
+procedure TFMain.DBGRespondentCellClick(Column: TColumn);
+begin
+with DM1 do
+
+begin
+
+with ADOQRespondent do
+
+begin
+
+EFamily.Text := FieldByName('Family').AsString;
+
+EName.Text := FieldByName('Name').AsString;
+
+ESurName.Text := FieldByName('SurName').AsString;
+
+CBSex.Text := FieldByName('Sex').AsString;
+
+DTPBorn.Date := FieldByName('Born').AsDateTime;
+
+end;
+
+end;
+end;
+
+procedure TFMain.DBGRespondentKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+with DM1 do
+
+begin
+
+with ADOQRespondent do
+
+begin
+
+EFamily.Text := FieldByName('Family').AsString;
+
+EName.Text := FieldByName('Name').AsString;
+
+ESurName.Text := FieldByName('SurName').AsString;
+
+CBSex.Text := FieldByName('Sex').AsString;
+
+DTPBorn.Date := FieldByName('Born').AsDateTime;
+
+end;
+
+end;
+end;
+
+procedure TFMain.EFindRespChange(Sender: TObject);
+begin
+// изменить запрос
+
+with DM1 do
+
+begin
+
+with ADOQRespondent do
+
+begin
+
+with SQL do
+
+begin
+
+// очистить старый запрос
+
+Clear;
+
+// вывести записи где фамилия "похожа" на введёный текст
+
+Add('SELECT * FROM Respondent WHERE Family LIKE ''%'+EFindResp.Text+'%''');
+
+end;
+
+// активировать запрос
+
+Active := True;
+
+DSRespondent.DataSet.Active :=false;
+DSRespondent.DataSet.Active :=true;
+
+end;
+
+end;
+end;
+
+procedure TFMain.FormActivate(Sender: TObject);
+var
+
+i : Integer;
+
+SH, SDB : String;
+
+begin
+
+// подключение базы данных для отображения списка респондентов и тестов
+
+S := ExtractFilePath(Application.ExeName);
+//showmessage(s);
+
+// установить путь к файлу справки
+
+//SH := 'Система АПДМ.chm';
+
+//SH := S + 'Help\'+SH;
+
+// подключить файл помощи
+
+//FMain.HelpFile := SH;
+
+// сформировать строку подключения базы данных
+
+SDB := 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=' + S +'\PDT.mdb;Persist Security Info=False';
+
+DM1.ADOCPDT.ConnectionString:=SDB;
+DM1.ADOCPDT.Connected :=true;
+with DM1 do
+
+begin
+
+// если активация включена, то выключить её
+
+ADOQRespondent.Active := False;
+
+ADOQTesting.Active := False;
+
+ADOQTest.Active := False;
+
+ADOQResult.Active := False;
+
+ADOQParamResult.Active := False;
+
+ADOQQuestion.Active := False;
+
+ADOQAnswer.Active := False;
+
+ADOQProtocol.Active := False;
+
+ADOQTesting2.Active := False;
+
+ADOQPassword.Active := False;
+
+// присвоить сформированную строку подключения
+
+ADOQRespondent.ConnectionString := SDB;
+
+ADOQTesting.ConnectionString := SDB;
+
+ADOQTest.ConnectionString := SDB;
+
+ADOQResult.ConnectionString := SDB;
+
+ADOQParamResult.ConnectionString := SDB;
+
+ADOQQuestion.ConnectionString := SDB;
+
+ADOQAnswer.ConnectionString := SDB;
+
+ADOQProtocol.ConnectionString := SDB;
+
+ADOQTesting2.ConnectionString := SDB;
+
+ADOQPassword.ConnectionString := SDB;
+
+// сделать активацию активной
+
+ADOQRespondent.Active := True;
+
+ADOQTesting.Active := True;
+
+ADOQTest.Active := True;
+
+ADOQResult.Active := True;
+
+ADOQParamResult.Active := True;
+
+ADOQQuestion.Active := True;
+
+ADOQAnswer.Active := True;
+
+ADOQProtocol.Active := True;
+
+ADOQTesting2.Active := True;
+
+ADOQPassword.Active := True;
+
+// считать информацию тестов из базы данных
+
+with ADOQTest do
+
+begin
+
+// очистить поле запроса
+
+SQL.Clear;
+
+// сформировать запрос для выбора всех данных
+
+SQL.Add('SELECT * FROM Test');
+
+// активировать запрос
+
+Active := TRUE;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// считать название теста и занести его в список
+
+LBTest.Items.Add(FieldByName('NameTest').AsString);
+
+Next;
+
+end;
+
+end;
+
+// считать информацию респондентов из базы данных
+
+with ADOQRespondent do
+
+begin
+
+// очистить поле запроса
+
+SQL.Clear;
+
+// сформировать запрос для выбора всех данных
+
+SQL.Add('SELECT * FROM Respondent');
+
+// активировать запрос
+
+Active := TRUE;
+
+for i := 0 to RecordCount-1 do
+
+begin
+
+// считать название теста и присвоить его метке на форме
+
+LBRespondent.Items.Add(FieldByName('Family').AsString+' '+
+
+FieldByName('Name').AsString+' '+
+
+FieldByName('SurName').AsString);
+
+Next;
+
+end;
+
+end;
+
+// настройка элементов окна для масштабирования
+
+SetBounds( Left - ClientOrigin.X, Top - ClientOrigin.Y,
+
+GetDeviceCaps(Canvas.handle, HORZRES ) +
+
+(Width - ClientWidth),
+
+GetDeviceCaps( Canvas.handle,VERTRES )
+
++ (Height - ClientHeight ));
+
+// панель тестирования скрыть
+DBGRespondent.Columns.Items[0].Width:= 256;
+DBGTesting.Columns.Items[0].Width:= 256;
+DBGResult.Columns.Items[0].Width:= 256;
+
+
+PMainTest.Visible := False;
+
+// ширина панели тестирования весь экран
+
+PMainTest.Width := ClientWidth;
+
+// высота панели тестирования весь экран
+
+PMainTest.Height := ClientHeight;
+
+// ширина панели респондентов половина панели тестирования
+
+PResp.Width := ClientWidth div 2;
+
+// высота панели списка респондентов весь экран
+
+PResp.Height := ClientHeight;
+
+// высота панели списка тестов весь экран
+
+PTest.Height := ClientHeight;
+
+// панель тестирования отобразить
+
+PMainTest.Visible := True;
+
+// ширина панели психолога весь экран
+
+PMainPsy.Width := ClientWidth;
+
+// ширина панели эксперимента весь экран
+
+PExperiment.Width := ClientWidth;
+
+// ширина списка экспериментов респондента треть экрана
+
+DBGTesting.Width := PExperiment.Width div 3;
+
+// ширина кнопок эксперимента треть экрана
+
+PButExp.Width := PExperiment.Width div 3;
+
+// ширина панели для вывода результатов/протокола треть экрана
+
+PResultProtocol.Width := PExperiment.Width div 3;
+
+// выравнять кнопку "результаты"
+
+BBResult.Left := (PButExp.Width div 2) - (BBResult.Width div 2);
+
+BBResult.Top := (PButExp.Height div 3) - (BBResult.Height div 2);
+
+BBResultOtchet.Left := BBResult.Left;
+
+BBResultOtchet.Top := BBResult.Top + BBResultOtchet.Height + 1;
+
+// выравнять кнопку "протокол"
+
+BBProtocol.Left := (PButExp.Width div 2) - (BBProtocol.Width div 2);
+
+BBProtocol.Top := (PButExp.Height div 3)*2 - (BBProtocol.Height div 2);
+
+BBProtocolOtchet.Left := BBProtocol.Left;
+
+BBProtocolOtchet.Top := BBProtocol.Top + BBProtocolOtchet.Height + 1;
+
+// настроить панель добавления
+
+PAddResp.Width := ClientWidth;
+
+EFamily.Left := (PAddResp.Width div 5) - (EFamily.Width div 2);
+
+EName.Left := (PAddResp.Width div 5) - (EName.Width div 2);
+
+ESurName.Left := (PAddResp.Width div 5) - (ESurName.Width div 2);
+
+LFamily.Left := EFamily.Left;
+
+LName.Left := EName.Left;
+
+LSurName.Left := ESurName.Left;
+
+CBSex.Left := (PAddResp.Width div 5) * 2 - (CBSex.Width div 2);
+
+LSex.Left := CBSex.Left;
+
+DTPBorn.Left := (PAddResp.Width div 5) * 3 - (CBSex.Width div 2);
+
+LBorn.Left := DTPBorn.Left;
+
+BBAdd.Left := (PAddResp.Width div 5) * 4 - (BBAdd.Width div 2);
+
+BBEdit.Left := (PAddResp.Width div 5) * 4 - (BBEdit.Width div 2);
+
+BBDelete.Left := (PAddResp.Width div 5) * 4 - (BBDelete.Width div 2);
+
+end;
+
+// по "умолчанию" активно окно тестирования
+
+PMainPsy.Visible := False;
+
+PMainPsy.Align := alNone;
+
+PMainTest.Visible := True;
+
+PMainTest.Align := alClient;
+
+end;
+
+procedure TFMain.LBRespondentClick(Sender: TObject);
+begin
+// если выбран респондент и тест кнопка "Тестирование" активна
+
+if (LBRespondent.ItemIndex <> - 1)and(LBTest.ItemIndex <> - 1) then
+
+BBTest.Enabled := true
+
+else
+
+// кнопка "Тестирование" не активна
+
+BBTest.Enabled := false;
+end;
+
+procedure TFMain.LBTestClick(Sender: TObject);
+begin
+// если выбран респондент и тест кнопка "Тестирование" активна
+
+if (LBRespondent.ItemIndex <> - 1)and(LBTest.ItemIndex <> - 1) then
+
+BBTest.Enabled := true
+
+else
+
+// кнопка "Тестирование" не активна
+
+BBTest.Enabled := false;
+end;
+
+procedure TFMain.RGStatusClick(Sender: TObject);
+begin
+// сменить окна программы в соответствии с выбранным статусом
+
+case RGStatus.ItemIndex of
+
+// подготовить режим респондент
+
+0 : begin
+
+
+// запретить кнопку тестирования (сброс "активного" состояния)
+
+BBTest.Enabled := False;
+
+// панель психолога скрыть
+
+PMainPsy.Visible := False;
+
+// панель психолога "не распахивается"
+
+PMainPsy.Align := alNone;
+
+// панель тестирования показать
+
+PMainTest.Visible := True;
+
+// панель тестирования "распахнуть" на всё доступное пространство
+
+PMainTest.Align := alClient;
+
+// ресондент в списоке респонденов не выбран
+
+LBRespondent.ItemIndex := -1;
+
+// тест в списке тестов не выбран
+
+LBTest.ItemIndex := -1;
+
+end;
+
+// подготовить режим психолог
+
+1 : begin
+
+with FPassword do
+
+begin
+
+// пароль не активен
+
+Pass := False;
+
+// отобразить окно запроса пароля
+
+ShowModal;
+
+// если пароль задан правильно
+
+if Pass then
+
+begin
+
+// запретить кнопку тестирования (работает режим "психолог")
+
+BBTest.Enabled := False;
+
+// панель тестирования скрыть
+
+PMainTest.Visible := False;
+
+// панель тестирования "не распахивается"
+
+PMainTest.Align := alNone;
+
+// панель психолога показать
+
+PMainPsy.Visible := True;
+
+// панель психолога "распахнуть" на всё доступное пространство
+
+PMainPsy.Align := alClient;
+
+end
+
+else
+
+// пароль задан не правильно - режим активация режима тестирования
+
+begin
+
+// запретить кнопку тестирования (сброс "активного" состояния)
+
+BBTest.Enabled := False;
+
+// панель психолога скрыть
+
+PMainPsy.Visible := False;
+
+// панель психолога "не распахивается"
+
+PMainPsy.Align := alNone;
+
+// панель тестирования показать
+
+
+PMainTest.Visible := True;
+
+// панель тестирования "распахнуть" на всё доступное пространство
+
+PMainPsy.Align := alClient;
+
+// выбор статутса "тестирование"
+
+RGStatus.ItemIndex := 0;
+
+// ресондент в списоке респонденов не выбран
+
+LBRespondent.ItemIndex := -1;
+
+// тест в списке тестов не выбран
+
+LBTest.ItemIndex := -1;
+
+end;
+
+end;
+
+end;
+
+end; // case
+end;
+
+procedure TFMain.Timer1Timer(Sender: TObject);
+begin
+DM1.DSRespondent.DataSet.Active :=false;
+DM1.DSRespondent.DataSet.Active :=true;
+BBAdd.Enabled :=True;
+BBEdit.Enabled :=True;
+BBDelete.Enabled :=True;
+Timer1.Enabled :=false;
+end;
+
+end.

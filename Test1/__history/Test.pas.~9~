@@ -1,0 +1,295 @@
+unit Test;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TFTest = class(TForm)
+    PTop: TPanel;
+    PBottom: TPanel;
+    PQuestion: TPanel;
+    PAnswer: TPanel;
+    LNo: TLabel;
+    LQuest: TLabel;
+    LAnsw: TLabel;
+    RGYesNo: TRadioGroup;
+    LOk: TLabel;
+    BBExit: TBitBtn;
+    TPausa: TTimer;
+    Label1: TLabel;
+    Label2: TLabel;
+    Timer1: TTimer;
+    procedure FormCreate(Sender: TObject);
+    procedure RGYesNoClick(Sender: TObject);
+    procedure BBExitClick(Sender: TObject);
+    procedure TPausaTimer(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Timer1Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FTest: TFTest;
+   I : Integer;
+   t : integer = 300;
+implementation
+
+{$R *.dfm}
+
+uses Variable, Data, main;
+
+procedure TFTest.BBExitClick(Sender: TObject);
+begin
+ // для учёта аварийного выхода общий балл установить в несуществующее значение
+ All := -1;
+ FMain.BBRes.Visible :=true;
+  FMain.BBTest.Visible :=false;
+ // выход из тестирования
+ Close;
+end;
+
+procedure TFTest.FormCreate(Sender: TObject);
+begin
+ // настроить базы данных для окна тестирования
+ with DM do
+ begin
+ I:=1;
+  // скорректировать путь к базе данных для этого деактивировать базу, изменить путь, снова активировать
+  // вопросы
+  ADOQQuest.Active := False;
+  ADOQQuest.ConnectionString := SDB;
+  ADOQQuest.Active := True;
+  // ответы
+  ADOQAnsw.Active := False;
+  ADOQAnsw.ConnectionString := SDB;
+  ADOQAnsw.Active := True;
+  // протокол тестирования
+  ADOQProt.Active := False;
+  ADOQProt.ConnectionString := SDB;
+  ADOQProt.Active := True;
+  // результаты тестирования
+  ADOQRes.Active := False;
+  ADOQRes.ConnectionString := SDB;
+  ADOQRes.Active := True;
+  // параметры результатов
+  ADOQParamRes.Active := False;
+  ADOQParamRes.ConnectionString := SDB;
+  ADOQParamRes.Active := True;
+ end;
+ // настроить файл помощи
+ //FTest.HelpFile := SH;
+   LOk.Caption := '******************';
+
+  SetBounds( Left - ClientOrigin.X, Top - ClientOrigin.Y, GetDeviceCaps(
+ Canvas.handle, HORZRES ) + (Width - ClientWidth), GetDeviceCaps( Canvas.handle,VERTRES )
+ + (Height - ClientHeight ));
+
+BBExit.Left := (ClientWidth div 2)-(BBExit.Width div 2);
+LOk.Left := (ClientWidth div 2)-(LOk.Left div 4);
+RGYesNo.Left:= (ClientWidth div 2)-(RGYesNo.Left div 2);
+LAnsw.Left :=(ClientWidth div 2)-(LAnsw.Left div 2);
+Label1.Left := (ClientWidth div 2)-(Label1.Width div 2);
+Label2.Left := (ClientWidth div 2)-(Label2.Width div 2);
+end;
+
+procedure TFTest.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+If Key = #27 then
+begin
+ All := -1;
+ FMain.BBRes.Visible :=true;
+  FMain.BBTest.Visible :=false;
+Close;
+end;
+
+If Key = '1' then
+begin
+RGYesNO.ItemIndex :=0;
+end;
+
+If Key = '2' then
+begin
+RGYesNO.ItemIndex :=1;
+end;
+
+If Key = '0' then
+begin
+BBExit.Click;
+end;
+end;
+
+procedure TFTest.RGYesNoClick(Sender: TObject);
+  var
+ S : String;      // вспомогательная переменная
+ TAnswN : TDateTime;  // переменная для оценки времени, потраченного на ответ
+ Time  : TDateTime;  // переменная для оценки времени, потраченного на ответ
+ Code_Param: Integer; // параметр результата
+begin
+ // если ответ не выбран выйти из процедуры
+ If RGYesNo.ItemIndex = -1 then Exit;
+ // переход к очередному вопросу
+ If I < 18 then
+ begin
+  // вывести выбранный ответ
+  If RGYesNo.ItemIndex = 0 then
+  begin
+    LAnsw.Caption := '<';
+    if (I=1) or (I=2) or (I=4) or (I=8) or (I=11) or (I=12) or (I=13) or (I=14) or (I=15) or (I=16) then
+    Inc(All);
+
+    end
+  else
+  begin
+    LAnsw.Caption := '>';
+      if (I=3) or (I=5) or (I=6) or (I=7) or (I=8) or (I=9) or (I=10) or (I=17) or (I=18) or (I=19) then
+    Inc(All);
+
+    end;
+  // отобразить выбранный ответ
+  LAnsw.Visible := True;
+  // включить время отображения выбранного ответа
+  TPausa.Enabled := True;
+  // определение номера ответа
+  with DM do
+  begin
+  with ADOQAnsw do
+  begin
+   // очистить "старый" запрос
+   SQL.Clear;
+   // считать номер выбранного ответа
+   SQL.Add('SELECT * FROM ANSWER WHERE ANSWER = '+QuotedStr(LAnsw.Caption));
+   // активировать запрос
+   Active := TRUE;
+   // запомнить номер ответа
+   Num_Answer := FieldByName('Num_Answer').AsInteger;
+  end;
+  end;
+  // подсчёт очередных баллов
+      // на панеле вопросов уменьшить количество оставшихся вопросов на 1 (убрать одну *)
+  S := LOk.Caption;
+  S[I] := ' ';
+  LOk.Caption := S;
+  // подсчитать время ответа
+  // посчитаь текущее время
+  TAnswN := Now;
+  // вычесть время начала ответа
+  Time := TAnswN - TAnsw;
+  // изменить время начала ответа на следующий вопрос
+  TAnsw := TAnswN;
+  // если тест запущен из системы записать параметры ответа в протокол
+  if ParamCount > 0 then
+   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // записать в протокол вопрос, ответ и время, потраченное на ответ
+  with DM do
+  begin
+  with ADOQProt do
+  begin
+   with SQL do
+   begin
+    // очистить старый запрос
+    Clear;
+    // записать в протокол номера эксперимента, вопроса, вбранного ответа, время, потраченного на ответ
+
+   //Label2.Caption := IntToStr(I);
+    Add('INSERT INTO Protocol (ID_Testing, Num_Question, Num_Answer, TimeAnswer)VALUES('+IntToStr(ID_Testing)+' ,'+IntToStr(I)+', '+IntToStr(Num_Answer)+','+QuotedStr(TimeToStr(Time))+')');
+    // выполнить запрос
+    ExecSQL;
+   end;
+  end;
+  end;
+  // увеличить счётчик вопросов на 1
+  Inc(I);
+ end
+ else
+ begin
+  // выход из тестирования
+  // запись в базу данных результата
+  // если тест запущен из системы записать параметры ответа в протокол
+  if ParamCount > 0 then
+  with DM do
+  begin
+   // очистить "старый" запрос
+   ADOQParamRes.SQL.Clear;
+   // найти номер соответствующего параметра результатов
+   ADOQParamRes.SQL.Add('SELECT * FROM ParamResult WHERE Parametr = '+QuotedStr('Правильных'));
+   // активировать запрос
+   ADOQParamRes.Active := True;
+   // считать код параметра
+   Code_Param := ADOQParamRes.FieldByName('ID_ParamResult').AsInteger;
+   // очистить "старый" запрос
+   ADOQRes.SQL.Clear;
+   // записать в результаты тестирования номера эксперимента, параметра результата, значение результата
+   ADOQRes.SQL.Add('INSERT INTO Result (ID_Testing, ID_ParamResult, Value_Result)VALUES('+IntToStr(ID_Testing)+' ,'+IntToStr(Code_Param)+', '+IntToStr(All)+')');
+   // выполнить запрос
+   ADOQRes.ExecSQL;
+  end;
+
+  // отобразить кнопку результат, скрыть кнопку тест
+  FMain.BBTest.Visible := false;
+  FMain.BBRes.Visible := true;
+
+  Close;
+ end;
+
+ // установить активной кнопку завершения теста
+ BBExit.SetFocus;
+end;
+
+
+
+procedure TFTest.Timer1Timer(Sender: TObject);
+begin
+t:=t-1;
+label2.Caption := 'Времени осталось: '+inttostr(t);
+if t = 0 then
+begin
+Timer1.Enabled :=false;
+BBExit.Click;
+end;
+end;
+
+procedure TFTest.TPausaTimer(Sender: TObject);
+begin
+ // скрыть отображение выбранного ответа
+ LAnsw.Visible := False;
+ // остановить таймер ответа
+ TPausa.Enabled := False;
+ // подготовить очередной вопрос}
+  // вывести очередной вопрос и считать ответ респондента
+  // скоррекитровать размер поля номера вопроса
+  LNo.Left := 20;
+  if I > 10 then
+   LNo.Width := 200;
+  // если номер вопроса меньше 10 дописать слева 0
+  if I <= 9 then
+    LNo.Caption := '0'+IntToStr(I) + '. '
+  else
+    LNo.Caption := IntToStr(I) + '.';
+  // считаь очередной вопрос из базы данных
+  with DM do
+  begin
+  with ADOQQuest do
+  begin
+   // очистить "старый" запрос
+   SQL.Clear;
+   // считать текст вопроса по его номеру
+   SQL.Add('SELECT * FROM Question WHERE (ID_Test='+IntToStr(ID_Test)+') AND (Num_Question ='+IntToStr(I)+')');
+   // активировать запрос
+   Active := TRUE;
+   // вывести текст вопроса
+   LQuest.Caption := FieldByName('Question').AsString;
+  end;
+  end;
+  // считывать варианты ответа на очередной вопрос не надо - варанты ответов одинаковые
+  // снять выбранный ответ - установить значение на "ответ не выбран"
+ RGYesNo.ItemIndex := -1; // по умолчанию ответ не определён
+
+end;
+
+end.

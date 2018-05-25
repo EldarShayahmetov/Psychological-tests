@@ -1,0 +1,694 @@
+object FMain: TFMain
+  Left = 0
+  Top = 0
+  HelpType = htKeyword
+  HelpKeyword = 'F1'
+  Align = alClient
+  BorderStyle = bsNone
+  Caption = 'FMain'
+  ClientHeight = 515
+  ClientWidth = 759
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 759
+    Height = 57
+    Align = alTop
+    TabOrder = 0
+    object Label4: TLabel
+      Left = 477
+      Top = 22
+      Width = 7
+      Height = 29
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -24
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object BitBtn1: TBitBtn
+      Left = 40
+      Top = 17
+      Width = 75
+      Height = 25
+      Caption = #1042#1099#1093#1086#1076
+      Kind = bkClose
+      NumGlyphs = 2
+      TabOrder = 0
+    end
+    object RGStatus: TRadioGroup
+      Left = 239
+      Top = 9
+      Width = 209
+      Height = 42
+      Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1089#1074#1086#1081' '#1089#1090#1072#1090#1091#1089
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        #1056#1077#1089#1087#1086#1085#1076#1077#1085#1090
+        #1055#1089#1080#1093#1086#1083#1086#1075)
+      TabOrder = 1
+      OnClick = RGStatusClick
+    end
+    object BBTest: TBitBtn
+      Left = 121
+      Top = 17
+      Width = 112
+      Height = 25
+      Caption = #1058#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1077
+      Enabled = False
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333000000
+        000033333377777777773333330FFFFFFFF03FF3FF7FF33F3FF700300000FF0F
+        00F077F777773F737737E00BFBFB0FFFFFF07773333F7F3333F7E0BFBF000FFF
+        F0F077F3337773F3F737E0FBFBFBF0F00FF077F3333FF7F77F37E0BFBF00000B
+        0FF077F3337777737337E0FBFBFBFBF0FFF077F33FFFFFF73337E0BF0000000F
+        FFF077FF777777733FF7000BFB00B0FF00F07773FF77373377373330000B0FFF
+        FFF03337777373333FF7333330B0FFFF00003333373733FF777733330B0FF00F
+        0FF03333737F37737F373330B00FFFFF0F033337F77F33337F733309030FFFFF
+        00333377737FFFFF773333303300000003333337337777777333}
+      NumGlyphs = 2
+      TabOrder = 2
+      OnClick = BBTestClick
+    end
+  end
+  object PBottom: TPanel
+    Left = 0
+    Top = 499
+    Width = 759
+    Height = 16
+    Align = alBottom
+    TabOrder = 1
+  end
+  object PMainPsy: TPanel
+    Left = 0
+    Top = 57
+    Width = 759
+    Height = 442
+    Align = alClient
+    TabOrder = 2
+    object PAddResp: TPanel
+      Left = 1
+      Top = 1
+      Width = 757
+      Height = 160
+      Align = alTop
+      TabOrder = 0
+      object LFamily: TLabel
+        Left = 64
+        Top = 6
+        Width = 44
+        Height = 13
+        Caption = #1060#1072#1084#1080#1083#1080#1103
+      end
+      object LName: TLabel
+        Left = 64
+        Top = 55
+        Width = 19
+        Height = 13
+        Caption = #1048#1084#1103
+      end
+      object LSurName: TLabel
+        Left = 64
+        Top = 106
+        Width = 49
+        Height = 13
+        Caption = #1054#1090#1095#1077#1089#1090#1074#1086
+      end
+      object LSex: TLabel
+        Left = 215
+        Top = 55
+        Width = 19
+        Height = 13
+        Caption = #1055#1086#1083
+      end
+      object LBorn: TLabel
+        Left = 392
+        Top = 53
+        Width = 80
+        Height = 13
+        Caption = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
+      end
+      object EFamily: TEdit
+        Left = 64
+        Top = 25
+        Width = 121
+        Height = 21
+        TabOrder = 0
+      end
+      object EName: TEdit
+        Left = 64
+        Top = 74
+        Width = 121
+        Height = 21
+        TabOrder = 1
+      end
+      object ESurName: TEdit
+        Left = 64
+        Top = 125
+        Width = 121
+        Height = 21
+        TabOrder = 2
+      end
+      object BBAdd: TBitBtn
+        Left = 568
+        Top = 37
+        Width = 145
+        Height = 25
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          33333333FF33333333FF333993333333300033377F3333333777333993333333
+          300033F77FFF3333377739999993333333333777777F3333333F399999933333
+          33003777777333333377333993333333330033377F3333333377333993333333
+          3333333773333333333F333333333333330033333333F33333773333333C3333
+          330033333337FF3333773333333CC333333333FFFFF77FFF3FF33CCCCCCCCCC3
+          993337777777777F77F33CCCCCCCCCC3993337777777777377333333333CC333
+          333333333337733333FF3333333C333330003333333733333777333333333333
+          3000333333333333377733333333333333333333333333333333}
+        NumGlyphs = 2
+        TabOrder = 3
+        OnClick = BBAddClick
+      end
+      object BBEdit: TBitBtn
+        Left = 568
+        Top = 68
+        Width = 145
+        Height = 25
+        Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100
+        Glyph.Data = {
+          36010000424D3601000000000000760000002800000011000000100000000100
+          040000000000C0000000130B0000130B00001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00399999933333
+          3333300000003999999333333000300000003333333333333000300000003999
+          9993333333333000000039999993333333003000000033333333333333003000
+          00003333333333333333300000003333333333333300300000003333C33C3333
+          330030000000333CC33CC3333333300000003CCCCCCCCCC39933300000003CCC
+          CCCCCCC3993330000000333CC33CC3333333300000003333C33C333330003000
+          0000333333333333300030000000333333333333333330000000}
+        NumGlyphs = 2
+        TabOrder = 4
+        OnClick = BBEditClick
+      end
+      object BBDelete: TBitBtn
+        Left = 568
+        Top = 99
+        Width = 145
+        Height = 25
+        Caption = #1059#1076#1072#1083#1080#1090#1100
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333FF33333333333330003333333333333777333333333333
+          300033FFFFFF3333377739999993333333333777777F3333333F399999933333
+          3300377777733333337733333333333333003333333333333377333333333333
+          3333333333333333333F333333333333330033333F33333333773333C3333333
+          330033337F3333333377333CC3333333333333F77FFFFFFF3FF33CCCCCCCCCC3
+          993337777777777F77F33CCCCCCCCCC399333777777777737733333CC3333333
+          333333377F33333333FF3333C333333330003333733333333777333333333333
+          3000333333333333377733333333333333333333333333333333}
+        NumGlyphs = 2
+        TabOrder = 5
+        OnClick = BBDeleteClick
+      end
+    end
+    object CBSex: TComboBox
+      Left = 216
+      Top = 75
+      Width = 145
+      Height = 21
+      TabOrder = 1
+      Text = #1053#1077' '#1074#1099#1073#1088#1072#1085#1085#1099#1081
+      Items.Strings = (
+        #1052#1091#1078#1089#1082#1086#1081
+        #1046#1077#1085#1089#1082#1080#1081)
+    end
+    object DTPBorn: TDateTimePicker
+      Left = 393
+      Top = 73
+      Width = 121
+      Height = 21
+      Date = 42855.778676585650000000
+      Time = 42855.778676585650000000
+      TabOrder = 2
+    end
+    object PExperiment: TPanel
+      Left = 1
+      Top = 270
+      Width = 757
+      Height = 171
+      Align = alBottom
+      TabOrder = 3
+      object Panel1: TPanel
+        Left = 1
+        Top = 1
+        Width = 755
+        Height = 16
+        Align = alTop
+        TabOrder = 0
+      end
+      object DBGTesting: TDBGrid
+        Left = 1
+        Top = 17
+        Width = 312
+        Height = 153
+        Align = alLeft
+        DataSource = DM1.DSTesting
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'NameTest'
+            Title.Caption = #1053#1072#1079#1074#1072#1085#1080#1077' '#1090#1077#1089#1090#1072
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Testing_Date'
+            Title.Caption = #1044#1072#1090#1072' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103
+            Width = 128
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Testing_Time'
+            Title.Caption = #1042#1088#1077#1084#1103' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103
+            Width = 128
+            Visible = True
+          end>
+      end
+      object PButExp: TPanel
+        Left = 632
+        Top = 17
+        Width = 124
+        Height = 153
+        Align = alRight
+        TabOrder = 2
+        object BBResult: TBitBtn
+          Left = 32
+          Top = 9
+          Width = 81
+          Height = 25
+          Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555500000000
+            0555555F7777777775F55500FFFFFFFFF0555577F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FFFFFFFFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF777FFFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF7F777FF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF77F7FFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FFFFFFFFF05557F7FF5F5F5F57F550F00F0F0F0F
+            005557F77F7F7F7F77555055070707070555575F7F7F7F7F7F55550507070707
+            0555557575757575755555505050505055555557575757575555}
+          NumGlyphs = 2
+          TabOrder = 0
+          OnClick = BBResultClick
+        end
+        object BBProtocol: TBitBtn
+          Left = 32
+          Top = 71
+          Width = 81
+          Height = 25
+          Caption = #1055#1088#1086#1090#1086#1082#1083
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00500000000055
+            555557777777775F55550FFFFFFFFF0555557F5555555F7FFF5F0FEEEEEE0000
+            05007F555555777775770FFFFFF0BFBFB00E7F5F5557FFF557770F0EEEE000FB
+            FB0E7F75FF57775555770FF00F0FBFBFBF0E7F57757FFFF555770FE0B00000FB
+            FB0E7F575777775555770FFF0FBFBFBFBF0E7F5575FFFFFFF5770FEEE0000000
+            FB0E7F555777777755770FFFFF0B00BFB0007F55557577FFF7770FEEEEE0B000
+            05557F555557577775550FFFFFFF0B0555557FF5F5F57575F55500F0F0F0F0B0
+            555577F7F7F7F7F75F5550707070700B055557F7F7F7F7757FF5507070707050
+            9055575757575757775505050505055505557575757575557555}
+          NumGlyphs = 2
+          TabOrder = 1
+          OnClick = BBProtocolClick
+        end
+        object BBResultOtchet: TBitBtn
+          Left = 32
+          Top = 40
+          Width = 81
+          Height = 25
+          Caption = #1054#1090#1095#1077#1090
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555500000000
+            0555555F7777777775F55500FFFFFFFFF0555577F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FFFFFFFFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF777FFFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF7F777FF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FF77F7FFF05557F7F5FFFFFFF7F550F0FEEEEEEE
+            F05557F7F777777757F550F0FFFFFFFFF05557F7FF5F5F5F57F550F00F0F0F0F
+            005557F77F7F7F7F77555055070707070555575F7F7F7F7F7F55550507070707
+            0555557575757575755555505050505055555557575757575555}
+          NumGlyphs = 2
+          TabOrder = 2
+          OnClick = BBResultOtchetClick
+        end
+        object BBProtocolOtchet: TBitBtn
+          Left = 32
+          Top = 102
+          Width = 81
+          Height = 25
+          Caption = #1054#1090#1095#1077#1090
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00500000000055
+            555557777777775F55550FFFFFFFFF0555557F5555555F7FFF5F0FEEEEEE0000
+            05007F555555777775770FFFFFF0BFBFB00E7F5F5557FFF557770F0EEEE000FB
+            FB0E7F75FF57775555770FF00F0FBFBFBF0E7F57757FFFF555770FE0B00000FB
+            FB0E7F575777775555770FFF0FBFBFBFBF0E7F5575FFFFFFF5770FEEE0000000
+            FB0E7F555777777755770FFFFF0B00BFB0007F55557577FFF7770FEEEEE0B000
+            05557F555557577775550FFFFFFF0B0555557FF5F5F57575F55500F0F0F0F0B0
+            555577F7F7F7F7F75F5550707070700B055557F7F7F7F7757FF5507070707050
+            9055575757575757775505050505055505557575757575557555}
+          NumGlyphs = 2
+          TabOrder = 3
+          OnClick = BBProtocolOtchetClick
+        end
+      end
+      object PResultProtocol: TPanel
+        Left = 313
+        Top = 17
+        Width = 319
+        Height = 153
+        Align = alClient
+        TabOrder = 3
+        object DBGResult: TDBGrid
+          Left = 1
+          Top = 1
+          Width = 317
+          Height = 151
+          Align = alClient
+          DataSource = DM1.DSResult
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'Name_ParamResult'
+              Title.Caption = #1055#1072#1088#1072#1084#1077#1090#1088
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Value_Result'
+              Title.Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090
+              Width = 128
+              Visible = True
+            end>
+        end
+        object DBGProtocol: TDBGrid
+          Left = 1
+          Top = 1
+          Width = 317
+          Height = 151
+          Align = alClient
+          DataSource = DM1.DSProtocol
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'Num_Question'
+              Title.Caption = #1053#1086#1084#1077#1088' '#1042#1086#1087#1088#1086#1089#1072
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Question'
+              Title.Caption = #1042#1086#1087#1088#1086#1089
+              Width = 256
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Answer'
+              Title.Caption = #1054#1090#1074#1077#1090
+              Width = 128
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TimeAnswer'
+              Title.Caption = #1042#1088#1077#1084#1103' '#1086#1090#1074#1077#1090#1072
+              Width = 128
+              Visible = True
+            end>
+        end
+      end
+    end
+    object PFindResp: TPanel
+      Left = 1
+      Top = 216
+      Width = 757
+      Height = 54
+      Align = alBottom
+      TabOrder = 4
+      object Label2: TLabel
+        Left = 80
+        Top = 8
+        Width = 99
+        Height = 13
+        Caption = #1055#1086#1080#1089#1082' '#1088#1077#1089#1087#1086#1085#1076#1077#1085#1090#1072
+      end
+      object EFindResp: TEdit
+        Left = 80
+        Top = 27
+        Width = 233
+        Height = 21
+        TabOrder = 0
+        OnChange = EFindRespChange
+      end
+    end
+    object DBGRespondent: TDBGrid
+      Left = 1
+      Top = 161
+      Width = 757
+      Height = 55
+      Align = alClient
+      DataSource = DM1.DSRespondent
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ReadOnly = True
+      TabOrder = 5
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnCellClick = DBGRespondentCellClick
+      OnKeyUp = DBGRespondentKeyUp
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'Family'
+          Title.Caption = #1060#1072#1084#1080#1083#1080#1103
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Name'
+          Title.Caption = #1048#1084#1103
+          Width = 128
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SurName'
+          Title.Caption = #1054#1090#1095#1077#1089#1090#1074#1086
+          Width = 128
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Sex'
+          Title.Caption = #1055#1086#1083
+          Width = 128
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Born'
+          Title.Caption = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
+          Width = 128
+          Visible = True
+        end>
+    end
+  end
+  object PMainTest: TPanel
+    Left = 0
+    Top = 57
+    Width = 759
+    Height = 442
+    Align = alClient
+    TabOrder = 3
+    object PResp: TPanel
+      Left = 1
+      Top = 1
+      Width = 296
+      Height = 440
+      Align = alLeft
+      TabOrder = 0
+      object PFIOResp: TPanel
+        Left = 1
+        Top = 1
+        Width = 294
+        Height = 438
+        Align = alClient
+        TabOrder = 0
+        object PFind: TPanel
+          Left = 1
+          Top = 356
+          Width = 292
+          Height = 81
+          Align = alBottom
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 78
+            Top = 14
+            Width = 77
+            Height = 13
+            Caption = #1055#1086#1080#1089#1082' '#1092#1072#1084#1080#1083#1080#1080
+          end
+          object EFind: TEdit
+            Left = 37
+            Top = 33
+            Width = 162
+            Height = 21
+            TabOrder = 0
+          end
+          object BBFind: TBitBtn
+            Left = 222
+            Top = 32
+            Width = 83
+            Height = 25
+            Caption = #1053#1072#1081#1090#1080
+            Glyph.Data = {
+              76010000424D7601000000000000760000002800000020000000100000000100
+              04000000000000010000130B0000130B00001000000000000000000000000000
+              800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              333333333333333333FF33333333333330003FF3FFFFF3333777003000003333
+              300077F777773F333777E00BFBFB033333337773333F7F33333FE0BFBF000333
+              330077F3337773F33377E0FBFBFBF033330077F3333FF7FFF377E0BFBF000000
+              333377F3337777773F3FE0FBFBFBFBFB039977F33FFFFFFF7377E0BF00000000
+              339977FF777777773377000BFB03333333337773FF733333333F333000333333
+              3300333777333333337733333333333333003333333333333377333333333333
+              333333333333333333FF33333333333330003333333333333777333333333333
+              3000333333333333377733333333333333333333333333333333}
+            NumGlyphs = 2
+            TabOrder = 1
+            OnClick = BBFindClick
+          end
+        end
+        object LBRespondent: TListBox
+          Left = 1
+          Top = 51
+          Width = 292
+          Height = 305
+          Align = alClient
+          ItemHeight = 13
+          TabOrder = 1
+          OnClick = LBRespondentClick
+        end
+        object Panel2: TPanel
+          Left = 1
+          Top = 1
+          Width = 292
+          Height = 50
+          Align = alTop
+          Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1092#1072#1084#1080#1083#1080#1102' '#1088#1077#1089#1087#1086#1085#1076#1077#1085#1090#1072' '#1076#1083#1103' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103
+          TabOrder = 2
+        end
+      end
+    end
+    object PTest: TPanel
+      Left = 297
+      Top = 1
+      Width = 461
+      Height = 440
+      Align = alClient
+      TabOrder = 1
+      object PNameTest: TPanel
+        Left = 1
+        Top = 1
+        Width = 459
+        Height = 438
+        Align = alClient
+        TabOrder = 0
+        object LBTest: TListBox
+          Left = 1
+          Top = 51
+          Width = 457
+          Height = 386
+          HelpType = htKeyword
+          HelpKeyword = 'F1'
+          Align = alClient
+          ItemHeight = 13
+          TabOrder = 0
+          OnClick = LBTestClick
+        end
+        object Panel3: TPanel
+          Left = 1
+          Top = 1
+          Width = 457
+          Height = 50
+          Align = alTop
+          Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1084#1077#1090#1086#1076#1080#1082#1091' '#1076#1083#1103' '#1090#1077#1089#1090#1080#1088#1086#1074#1072#1085#1080#1103
+          TabOrder = 1
+        end
+      end
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 3000
+    OnTimer = Timer1Timer
+    Left = 680
+    Top = 8
+  end
+end

@@ -1,0 +1,24 @@
+program Relations;
+
+uses
+  Vcl.Forms,
+  Data in 'Data.pas' {DM: TDataModule},
+  main in 'main.pas' {Fmain},
+  Result in 'Result.pas' {FResult},
+  Test in 'Test.pas' {FTest},
+  Variable in 'Variable.pas',
+  Ins in 'Ins.pas' {Instruction};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TFmain, Fmain);
+  Application.CreateForm(TFTest, FTest);
+  Application.CreateForm(TFResult, FResult);
+  Application.CreateForm(TFTest, FTest);
+  Application.CreateForm(TInstruction, Instruction);
+  Application.Run;
+end.

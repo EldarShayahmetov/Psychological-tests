@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.817,C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas=C:\Users\Eldar\Desktop\ПЭ2\Variable.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.662,C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas=C:\Users\Eldar\Desktop\ПЭ2\Result.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.142,=C:\Users\Eldar\Desktop\ПЭ2\Data.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.941,=C:\Users\Eldar\Desktop\Test\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.659,=C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.220,=C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.139,=C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.349,C:\Users\Eldar\Desktop\ПЭ2\Unit1.pas=C:\Users\Eldar\Desktop\ПЭ2\Test.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.272,C:\Users\Eldar\Desktop\Test\Ins.pas=C:\Users\Eldar\Desktop\Test\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.776,=C:\Users\Eldar\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.809,C:\Users\Eldar\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Eldar\Desktop\ПЭ\main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.272,C:\Users\Eldar\Desktop\Test\Ins.dfm=C:\Users\Eldar\Desktop\Test\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.662,C:\Users\Eldar\Desktop\ПЭ2\Unit1.dfm=C:\Users\Eldar\Desktop\ПЭ2\Result.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.349,C:\Users\Eldar\Desktop\ПЭ2\Unit1.dfm=C:\Users\Eldar\Desktop\ПЭ2\Test.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.809,C:\Users\Eldar\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Eldar\Desktop\ПЭ\main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.175,C:\Users\Eldar\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Eldar\Desktop\ПЭ\Relations.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,263 @@
+unit main;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.HTMLHelpViewer,
+  Vcl.Imaging.jpeg;
+
+type
+  TFmain = class(TForm)
+    BBIns: TBitBtn;
+    BBTest: TBitBtn;
+    BBRes: TBitBtn;
+    BBExit: TBitBtn;
+    LProgr: TLabel;
+    LPsyholog: TLabel;
+    LNamePsyholog: TLabel;
+    LNameProgr: TLabel;
+    LName: TLabel;
+    IPsi: TImage;
+    ICub: TImage;
+    BLo: TBevel;
+    BHi: TBevel;
+    Label1: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure BBResClick(Sender: TObject);
+    procedure BBTestClick(Sender: TObject);
+    procedure BBInsClick(Sender: TObject);
+    procedure BBExitClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Fmain: TFmain;
+  s1, s2, NameTest: String;
+  ID_Test, I, ID_Testing: integer;
+
+implementation
+
+{$R *.dfm}
+
+uses Data, Result, Test, Variable, Ins;
+
+procedure TFmain.BBExitClick(Sender: TObject);
+begin
+if (All = -1)and(ParamCount>0) then
+
+begin
+
+with DM do
+
+begin
+
+//записать аварийное завершение работы теста
+
+// необходимо в БД записать аварийное завершение (Testing)
+
+// очистить "старый" запрос
+
+ADOQParamRes.SQL.Clear;
+
+// считать номер параметра результата "Аварийный выход"
+
+ADOQParamRes.SQL.Add('SELECT * FROM ParamResult WHERE Parametr = '+QuotedStr('Аварийный выход'));
+
+// выполнить запрос
+
+ADOQParamRes.Active := True;
+
+// считать номер параметра результата "Аварийный выход"
+
+Code_Param := ADOQParamRes.FieldByName('ID_ParamResult').AsInteger;
+
+// очистить "старый" запрос
+
+ADOQRes.SQL.Clear;
+
+// записать в результат номера эксперимента, праметра результата, результат
+showmessage('Аварийный выход');
+
+ADOQRes.SQL.Add('INSERT INTO Result (ID_Testing, ID_ParamResult, Value_Result)VALUES('+IntToStr(ID_Testing)+', '+IntToStr(Code_Param)+', '+'0'+')');
+
+// выполнить запрос
+
+ADOQRes.ExecSQL;
+
+end;
+
+end;
+
+// закрыть окно тестирования
+
+Close;
+end;
+
+procedure TFmain.BBInsClick(Sender: TObject);
+begin
+Instruction.ShowModal;
+end;
+
+procedure TFmain.BBResClick(Sender: TObject);
+begin
+    FResult.ShowModal;
+end;
+
+procedure TFmain.BBTestClick(Sender: TObject);
+begin
+ All := 0; // если тест не пройден, то балл равен несуществующему значению
+ // записать параметры тестирования в базу если тест запущен из под оболочки
+ Ftest.Timer1.Enabled := true;
+ if ParamCount > 0 then
+ begin
+
+  // заполнить базу данных эксперимента
+  with DM do
+  begin
+  with ADOQTesting do
+  begin
+   // скорректировать SQL запрос
+   with SQL do
+   begin
+    // очистить "старый" запрос
+    Clear;
+    // добавить в эксперимент номера респондента, теста, дату и время тестирования
+    Add('INSERT INTO Testing (ID_Respondent, ID_Test, Testing_Date, Testing_Time, NameTest)VALUES('+Respondent+', '+IntToStr(ID_Test)+', '+QuotedStr(FormatDateTime('YYYY/MM/DD',Now))+', '+QuotedStr(FormatDateTime('hh:mm',Now))+', '+Quotedstr(LName.Caption)+')');
+    // выполнить SQL команду
+    ExecSQL;
+    // очистить "старый" запрос
+    Clear;
+    // добавить новую команду
+    Add('SELECT * FROM Testing');
+   end;
+   // активировать запрос
+   Active := True;
+   // перейти на последнюю запись
+   Last;
+   // считать автоматически сформированный номер записи
+   ID_Testing := FieldByName('ID_Testing').AsInteger;
+  end;
+  end;
+ end;
+ // провести тестирование
+ FTest.ShowModal;
+
+end;
+
+procedure TFmain.FormCreate(Sender: TObject);
+begin
+ // считать путь запуска программы
+ S := ExtractFilePath(Application.ExeName);
+  //скопировать из пути путь без учёта папки "\Fillipse\" (10 симаолов)
+ S := Copy(S,1,Length(S)-6);
+ // сформировать строку подключения базы данных
+ SDB := 'Provider=Microsoft.Jet.OLEDB.4.0;Data Source='+S+'\Base\PDT.mdb;Persist Security Info=False';
+ // если активация включена, то выключить её
+with DM do
+ begin
+  // деактивировать открытые базы данных
+  ADOQTest.Active := False;
+  ADOQTesting.Active := False;
+  // присвоить сформированную строку подключения
+  ADOQTest.ConnectionString := SDB;
+  ADOQTesting.ConnectionString := SDB;
+  // активировать базу данных
+  ADOQTest.Active := True;
+  ADOQTesting.Active := True;
+ end;
+ // считать информацию теста из базы данных
+ with DM do
+ begin
+ with ADOQTest do
+ begin
+  // очистить поле запроса
+  SQL.Clear;
+  // сформировать запрос для методики №2020200
+  SQL.Add('SELECT * FROM Test WHERE Code= ''2''');
+  // активировать запрос
+  Active := TRUE;
+  // считать название теста и присвоить его метке на форме
+  LName.Caption := FieldByName('NameTest').AsString;
+  // счистать имя разработчика и присвоить его соответствующей метке на форме
+  LNameProgr.Caption := FieldByName('Developer').AsString;
+  // считать имя психолога - разработчика методики и присвоить его соответствующей метке на форме
+  LNamePsyholog.Caption := FieldByName('Psycologist').AsString;
+  // считать идентификатор теста
+  ID_Test := StrToInt(FieldByName('ID_Test').AsString);
+  // считать имя файла инструкции
+  SI := FieldByName('Instruction').AsString;
+  // считать имя файла помощи
+  SH := FieldByName('Help').AsString;
+  // установить путь к файлу справки
+  SH := S + 'Help\'+SH;
+  // считать название теста
+  SN := FieldByName('NameTest').AsString;
+ end;
+ end;
+ // указать файл справки в программе
+ FMain.HelpFile := SH;
+ // индивидуальный номер респондента передаётся как первый параметр
+ Respondent := ParamStr(1);
+ // указать размер окна (расчётного) на весь экран
+ SetBounds( Left - ClientOrigin.X, Top - ClientOrigin.Y, GetDeviceCaps(
+ Canvas.handle, HORZRES ) + (Width - ClientWidth), GetDeviceCaps( Canvas.handle,VERTRES )
+ + (Height - ClientHeight ));
+ // расположить элементы на форме пропорционально размеру всего окна
+ // расположить кнопки
+ BBIns.Left :=   (FMain.Width div 4) - (BBIns.Width div 2);
+ BBTest.Left := 2 * (FMain.Width div 4) - (BBTest.Width div 2);
+ BBRes.Left := 2 * (FMain.Width div 4) - (BBRes.Width div 2);
+ BBExit.Left := 3 * (FMain.Width div 4) - (BBExit.Width div 2);
+ BBIns.Top := FMain.Height - ((FMain.Height div 4) - (BBIns.Height div 2));
+ BBTest.Top := FMain.Height - ((FMain.Height div 4) - (BBTest.Height div 2));
+ BBRes.Top := FMain.Height - ((FMain.Height div 4) - (BBRes.Height div 2));
+ BBExit.Top := FMain.Height - ((FMain.Height div 4) - (BBExit.Height div 2));
+ // расположить картинки
+ IPsi.Left := (FMain.Width div 4) - (IPsi.Width div 2);
+ ICub.Left := 3*(FMain.Width div 4) - (ICub.Width div 2);
+ IPsi.Top := FMain.Height - 3*(FMain.Height div 5) - (IPsi.Height div 2);
+ ICub.Top := FMain.Height - 3*(FMain.Height div 5) - (ICub.Height div 2);
+ // расположить внешнюю рамку
+ BHi.Top := IPsi.Top - 20;
+ BHi.Height := IPsi.Height + 40;
+ BHi.Left := IPsi.Left - 20;
+ BHi.Width := (ICub.Left - IPsi.Left) + ICub.Width + 40;
+ // расположить название теста
+ LName.Width := ICub.Left - IPsi.Left - ICub.Width - 10;
+ LName.Left := IPsi.Left+IPsi.Width+5;
+ LName.Top := BHi.Top + (BHi.Height div 2) - (LName.Height div 2);
+ // расположить внутреннюю рамку
+ BLo.Top := LName.Top;
+ BLo.Left := LName.Left;
+ BLo.Height := LName.Height;
+ BLo.Width := LName.Width;
+ // расположить подписи программиста теста
+ LProgr.Left := 3 * (FMain.Width div 4) - (LProgr.Width div 2);
+ LNameProgr.Left := 3 * (FMain.Width div 4) - ((LProgr.Width div 2) - 10 - LProgr.Width);
+ LProgr.Top := FMain.Height - ((FMain.Height div 5) - (BBExit.Height div 2)) + 2 * LProgr.Height;
+ LNameProgr.Top := FMain.Height - ((FMain.Height div 5) - (BBExit.Height div 2)) + 2 * LProgr.Height;
+ // расположить подписи психолога теста
+ LPsyholog.Left := LProgr.Left;
+ LNamePsyholog.Left := LNameProgr.Left;
+ LPsyholog.Top := LProgr.Top + LProgr.Height + 10;
+ LNamePsyholog.Top := LPsyholog.Top;
+
+ label1.Left := BHi.Left;
+end;
+
+
+procedure TFmain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = '0' then BBExit.Click;
+if Key = '1' then BBIns.Click;
+if (Key = '2') and (BBTest.Visible = false) then BBIns.Click;
+if (Key = '2') and (BBTest.Visible = true) then BBTest.Click;
+
+end;
+
+end.

@@ -1,0 +1,103 @@
+unit Ins;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.ExtCtrls;
+
+type
+  TInstruction = class(TForm)
+    PTop: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    REIns: TRichEdit;
+    BBExit: TBitBtn;
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Instruction: TInstruction;
+  // размер шрифта задать равным 1
+
+SizeFont : Integer = 1;
+
+// переменная отвечающая за количество строк текста
+
+
+
+implementation
+
+{$R *.dfm}
+
+uses Variable;
+
+procedure TInstruction.FormActivate(Sender: TObject);
+var
+S : Byte;
+
+begin
+S := 1;
+
+// подготовить окно к полноэкранному варианту
+
+SetBounds( Left - ClientOrigin.X, Top - ClientOrigin.Y, GetDeviceCaps(
+
+Canvas.handle, HORZRES ) + (Width - ClientWidth), GetDeviceCaps( Canvas.handle,VERTRES )
+
++ (Height - ClientHeight ));
+
+
+// задать положение кнопки выход
+
+BBExit.Left := 2 * (Instruction.Width div 4) - (BBExit.Width div 2);
+
+// подобрать начальный размер шрифта
+
+REIns.Font.Size := ClientHeight div (S*8);
+
+// загрузить текст инструкции
+
+PTop.Caption := SN;
+
+REIns.Visible := False;
+
+// увеличивать шрифт до тех пор пока текст не будет вписываться в экран
+
+while (SizeFont <= (ClientHeight div (S*2-1)+5)-5) do
+
+begin
+
+// общее количество строк текста
+
+S := REIns.Lines.Count;
+
+// выделить весть текст
+
+REIns.SelectAll;
+
+// установить новый размер шрифта
+
+REIns.SelAttributes.Size := SizeFont;
+
+// увеличить размер шрифта на 1
+
+Inc(SizeFont,1);
+
+end;
+
+// отобразить полученный текст
+
+REIns.Visible := True;
+
+// убрать выделение
+
+REIns.SelLength := 0;
+end;
+
+end.

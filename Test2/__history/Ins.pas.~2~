@@ -1,0 +1,78 @@
+unit Ins;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.ExtCtrls;
+
+type
+  TInstruction = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    REIns: TRichEdit;
+    BitBtn1: TBitBtn;
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Instruction: TInstruction;
+
+implementation
+
+{$R *.dfm}
+
+procedure TInstruction.FormActivate(Sender: TObject);
+var
+// размер шрифта задать равным 1
+
+SizeFont : Integer = 1;
+
+// переменная отвечающая за количество строк текста
+
+S : Byte;
+
+begin
+
+REIns.Visible := False;
+
+// увеличивать шрифт до тех пор пока текст не будет вписываться в экран
+
+while (SizeFont <= (ClientHeight div (S*2-1)+5)) do
+
+begin
+
+// общее количество строк текста
+
+S := REIns.Lines.Count;
+
+// выделить весть текст
+
+REIns.SelectAll;
+
+// установить новый размер шрифта
+
+REIns.SelAttributes.Size := SizeFont;
+
+// увеличить размер шрифта на 1
+
+Inc(SizeFont,1);
+
+end;
+
+// отобразить полученный текст
+
+REIns.Visible := True;
+
+// убрать выделение
+
+REIns.SelLength := 0;
+end;
+
+end.
